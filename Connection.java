@@ -1,3 +1,7 @@
+package mail;
+
+import java.util.Scanner;
+
 /**
    Connects a phone to the mail system. The purpose of this
    class is to keep track of the state of a connection, since
@@ -61,12 +65,49 @@ public class Connection
       Reset the connection to the initial state and prompt
       for mailbox number
    */
-   private void resetConnection()
+   public int selectFirstMenu() {
+	   Scanner input = new Scanner(System.in);
+	   String key = "";
+	   phone.speak("To leave a message, press (1), to access your mailbox, press (2)");
+	   
+	   key = input.nextLine();
+	   
+	   if (key.equals("1")) {
+		   key = "";
+		   return 1;
+	   }
+	   else if (key.equals("2")) {
+		   key = "";
+		   return 2;
+	   }
+	   else if (!key.equals("1") && !key.equals("2")) {
+		   key = "";
+		   selectFirstMenu();
+	   }
+	   key = "";
+	   return 0;
+   }
+   void resetConnection()
    {
       currentRecording = "";
       accumulatedKeys = "";
+      int choice = selectFirstMenu();
+      if (choice == 1) {
       state = CONNECTED;
       phone.speak(INITIAL_PROMPT);
+      }
+      else if (choice == 2) {
+    	  state = MAILBOX_MENU;
+    	  phone.speak(MAILBOX_MENU_TEXT);
+      }
+      else if (choice == 0) {
+    	  System.out.println("Invalid Inputs");
+    	  resetConnection();
+      }
+      else {
+    	  System.out.println("result of selectFirstMenu(): "+ choice);
+    	  resetConnection();
+      }
    }
 
    /**
@@ -95,21 +136,25 @@ public class Connection
       Try to log in the user.
       @param key the phone key pressed by the user
    */
+   private int check = 0;
    private void login(String key)
    {
-      if (key.equals("#"))
+	   if (check == 0) {phone.speak("Please enter the passcode, then press the # key"); }
+      if (key.equals("#") && check >= 1)
       {
          if (currentMailbox.checkPasscode(accumulatedKeys))
          {
             state = MAILBOX_MENU;
             phone.speak(MAILBOX_MENU_TEXT);
          }
-         else
-            phone.speak("Incorrect passcode. Try again!");
+         else {
+            phone.speak("Incorrect passcode. Try again!"); }
          accumulatedKeys = "";
       }
       else
          accumulatedKeys += key;
+      	if (check == 0) { accumulatedKeys = ""; } 
+      	 check++;
    }
 
    /**
