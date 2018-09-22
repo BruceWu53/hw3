@@ -1,3 +1,4 @@
+package mail;
 import java.util.Scanner;
 
 /**
@@ -33,21 +34,33 @@ public class Telephone
    public void run(Connection c)
    {
       boolean more = true;
+      boolean isempty = true;
       while (more)
-      {
-         String input = scanner.nextLine();
-         if (input == null) return;
-         if (input.equalsIgnoreCase("H"))
-            c.hangup();
-         else if (input.equalsIgnoreCase("Q"))
-            more = false;
-         else if (input.length() == 1
-            && "1234567890#".contains(input))
-            c.dial(input);
-         else
-            c.record(input);
+		{
+			String input = scanner.nextLine();
+			if (input == null)
+				return;
+			if (input.equalsIgnoreCase("H")) {
+				c.hangup(); }
+			else if (input.equalsIgnoreCase("Q"))
+				more = false;
+			else if (input.length() == 1 && "1234567890#".contains(input)) {
+				if ("1234567890".contains(input)) {
+					c.dial(input);
+					isempty = false;
+				} else if ("#".contains(input) && !isempty) {
+					c.dial(input);
+
+				} else {
+					System.out.println("Invalid Entry");
+					isempty = true;
+					c.resetConnection();
+				}
+			} else
+				c.record(input);
       }
    }
 
    private Scanner scanner;
 }
+
