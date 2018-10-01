@@ -1,5 +1,5 @@
 import java.util.*;
-
+//for the bank account
 public class driver {
 	public static void main(String [] args) {
 		List<BankAccount> accounts = new ArrayList<>();
