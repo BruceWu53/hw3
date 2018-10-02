@@ -9,14 +9,17 @@ public class ZoomTester {
 		frame.setSize(1000, 1000);
 		frame.setMinimumSize(new Dimension(25, 25));
 		frame.setMaximumSize(new Dimension(1000, 1000));
+		frame.setPreferredSize(new Dimension(500, 500));
 		
 		JLabel label = new JLabel(car1);
+		label.setSize(new Dimension(100, 100));
 		label.setPreferredSize(new Dimension(500, 500));
 		label.setMinimumSize(new Dimension(25, 25));
 		label.setMaximumSize(new Dimension(700, 700));
 		
 		JButton ZoomIn = new JButton("Zoom In");
 		ZoomIn.addActionListener(event -> {
+			car1.removeOffset();
 			car1.ZoomIn();
 			label.setPreferredSize(new Dimension(car1.setIconWidth(car1.getIconWidth() * 2), car1.setIconHeight(car1.getIconHeight() * 2)));
 			frame.setPreferredSize(new Dimension(car1.getIconWidth() * 2,car1.getIconHeight() * 2));
@@ -24,6 +27,7 @@ public class ZoomTester {
 		});
 		JButton ZoomOut = new JButton("Zoom Out");
 		ZoomOut.addActionListener(event -> {
+			car1.addOffset();
 			car1.ZoomOut();
 			label.setPreferredSize(new Dimension(car1.setIconWidth(car1.getIconWidth() / 2), car1.setIconHeight(car1.getIconHeight() / 2)));
 			frame.setPreferredSize(new Dimension(car1.getIconWidth() / 2,car1.getIconHeight() / 2));
